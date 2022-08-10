@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/index.html</loc>
+    
+    <lastmod>2022-08-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/blog/2018/ghost-cut-over-steps/</loc>
+    
+    <lastmod>2022-08-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/blog/2018/how-osc-handle-table-with-fk/</loc>
+    
+    <lastmod>2022-08-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/blog/2018/quick-manual-of-pmm-mysql/</loc>
+    
+    <lastmod>2022-08-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/blog/2018/quick-maunal-myqlbinlog/</loc>
+    
+    <lastmod>2022-08-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/blog/2018/running-gh-ost-on-pxc/</loc>
+    
+    <lastmod>2022-08-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/blog/2022/lc-merge-k-sorted-arrays/</loc>
+    
+    <lastmod>2022-08-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/blog/2022/lc-number-of-sum-zero-in-four-nums/</loc>
+    
+    <lastmod>2022-08-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/categories/index.html</loc>
+    
+    <lastmod>2022-08-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/blog/2016/usage-database-sql-golang/</loc>
+    
+    <lastmod>2022-08-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/blog/2018/avoid-err-master-purged-gtids-required/</loc>
+    
+    <lastmod>2022-08-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/blog/2018/bug-report-of-gtid-replicaiton-91086/</loc>
+    
+    <lastmod>2022-08-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/blog/2018/did-online-ddl-work-on-pxc/</loc>
+    
+    <lastmod>2022-08-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+
+  <url>
+    <loc>https://beanbee.github.io/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/Golang/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/MySQL/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/GTID/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/Troubleshooting/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/Replication/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/Bug/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/PXC/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/Online-DDL/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/Galera-Cluster/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/OSC/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/RSU/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/gh-ost/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/FK/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/DDL/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/PMM/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/Monitoring/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/Percona/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/leetcode/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/interview/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/bytedance/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/tags/apple/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+
+  
+  <url>
+    <loc>https://beanbee.github.io/categories/codeblock/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://beanbee.github.io/categories/workspace/</loc>
+    <lastmod>2022-08-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+</urlset>

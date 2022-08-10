@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Galera Cluster能否使用Online DDL?"><meta name="keywords" content="PXC,Online DDL,Galera Cluster,OSC,RSU"><meta name="author" content="Ian"><meta name="copyright" content="Ian"><title>Galera Cluster能否使用Online DDL? | Beanbee's Blog</title><link rel="shortcut icon" href="/images/favicon.png"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="dns-prefetch" href="https://hm.baidu.com"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7d4742d910f55cfca7b3b16d97046c4e";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();</script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  hexoVersion: '5.4.2'
+} </script><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/blog/atom.xml" title="Beanbee's Blog" type="application/atom+xml">
+</head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="false"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Online-DDL-Overview"><span class="toc-number">1.</span> <span class="toc-text">Online DDL Overview</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DDL-on-Galera-Cluster"><span class="toc-number">2.</span> <span class="toc-text">DDL on Galera Cluster</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Total-Order-Isolation-TOI"><span class="toc-number">2.1.</span> <span class="toc-text">Total Order Isolation (TOI)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rolling-Schema-Upgrade-RSU"><span class="toc-number">2.2.</span> <span class="toc-text">Rolling Schema Upgrade (RSU)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Conclusion"><span class="toc-number">3.</span> <span class="toc-text">Conclusion</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/images/favicon.png"></div><div class="author-info__name text-center">Ian</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">11</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">21</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">2</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Blogroll</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://kingsamchen.github.io/">kingsamchen</a><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="http://madstrawberry.me/">madstrawberry</a><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="http://functionghw.is-programmer.com">FunctionGHW</a><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="http://blog.51cto.com/ytyzzm">JamesSong</a><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="http://sunus.me/">Sunus</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/images/default_top_image_beanbee.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Beanbee's Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> Search</span></a></span></div><div id="post-info"><div id="post-title">Galera Cluster能否使用Online DDL?</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2018-08-08</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/workspace/">workspace</a></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>MySQL 从5.6版本开始支持<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.6/en/innodb-create-index-overview.html">Online DDL</a>，即允许表在schema变更过程中继续让业务读写，最大程度减少部分<code>DDL</code>操作的锁表时间。Online DDL的出现给经历过MySQL老版本的人提供了极大的便利，而如果基于MySQL的PXC(Percona XtraDB Cluster)使用了5.6以上版本，能否也收益于Online DDL，加快大表变更速度呢？本文将探讨下Galera Cluster使用Online DDL可行性以及以PXC为例如何处理DDL。</p>
+<h1 id="Online-DDL-Overview"><a href="#Online-DDL-Overview" class="headerlink" title="Online DDL Overview"></a>Online DDL Overview</h1><p>5.6版本之前，DDL执行过程是：获取<code>metadata lock</code>，全量拷贝数据至内部新表(rebuild table)，拷贝完内部互换并删除老表；整个数据拷贝期间，业务无法写表，锁表时间取决于表大小。</p>
+<p>5.6+版本分几种类型的DDL来优化操作时间：</p>
+<ol>
+<li>操作只需要修改metadata，不需要拷贝全表数据；比如更改列<code>comment</code>&#x2F;<code>default value</code></li>
+<li>操作不需要修改metadata，也不需要rebuild table；比如加二级索引</li>
+<li>需要修改metedata+rebuild table的，则本地拷贝源表数据，拷贝完执行应用变更日志，这期间业务可写；如加列</li>
+</ol>
+<p>从类型上说，Online DDL只支持部分DDL，不过已能够覆盖绝大部分日常变更。无外乎加列、加索引……</p>
+<h1 id="DDL-on-Galera-Cluster"><a href="#DDL-on-Galera-Cluster" class="headerlink" title="DDL on Galera Cluster"></a>DDL on Galera Cluster</h1><p>PXC支持多点写入，任何时刻多个节点之间表数据一致。Galera使用了<code>Certification Based Replication</code>的方式进行多节点数据同步：</p>
+<p><img src="/images/certificationbasedreplication.png" alt="Certification Based Replication"></p>
+<ol>
+<li>单个节点事务提交时，将修改的事务信息以<code>write-set</code>形式广播给其他节点</li>
+<li>其他节点收到<code>write-set</code>后，通过主键、全局ID等信息判断是否和自身已有的事务冲突</li>
+<li>如果有一个冲突，发起提交的节点提交失败，事务回滚；否则提交成功，所有节点写入<code>write-set</code></li>
+</ol>
+<p>Galera集群会在事务发起之前，为每个事务分配一个全局唯一序列号，在提交时比对该序列号和最后一次成功提交之间的差值；如果这个期间有事务进行，并且和该事务主键相同，则相当于发生冲突，事务不能提交。因为其他节点发起的事务其实并不知晓这个事务，直接提交则会发生覆盖更新。这种认证方式旨在保证同样主键数据在同一事务窗口内不能在其他节点并发，从而确保数据一致。</p>
+<p>不过该方式只针对DML，DDL的处理方法则相对”粗暴“的多。为了保证全局表的schema一致，Galera使用了特殊的方法来处理DDL，目前有TOI(default)、RSU两种模式。</p>
+<span id="more"></span>
+
+<h2 id="Total-Order-Isolation-TOI"><a href="#Total-Order-Isolation-TOI" class="headerlink" title="Total Order Isolation (TOI)"></a>Total Order Isolation (TOI)</h2><p><a target="_blank" rel="noopener" href="http://galeracluster.com/documentation-webpages/schemaupgrades.html#total-order-isolation">TOI模式</a>下所有DDL操作在节点之间严格按照顺序执行，执行期间<strong>所有事务</strong>无法提交：</p>
+<ol>
+<li>DDL的Certification Interval永远为0。换句话说，DDL一定可以得到执行</li>
+<li>如果执行DDL之前或期间有事务引用了相关表，无法提交：<code>ERROR 1213 (40001): Deadlock found when trying to get lock</code></li>
+<li>执行期间发起的事务，不涉及DDL操作的表的，均会被Galera阻塞：<code>wsrep in pre-commit stage</code>状态</li>
+<li>一旦DDL的<code>certification</code>通过，则同时在所有节点执行，DDL在对应的节点能否执行成功无法知晓</li>
+<li>后发起的DDL操作依旧被Galera阻塞，等待上一条结束，尽管不是一张表：<code>Preparing for TO isolation</code></li>
+</ol>
+<p>2中有个比较难理解的点，如果一个事务在DDL之前发起了开始操作A表，理论上后面来的DDL需要等待它释放<code>metadata</code>锁才能操作，然后Galera里面则是直接让DDL开始执行，相对而言把这个先来的事务抛弃（提交时候报错<code>deadlock</code>）。这一点直接导致了Online DDL在Galera Cluster上都不可行。因为DDL之后，该表的DML事务都被Galera拒绝了，这些事务根本没机会被MySQL处理，即使MySQL的Online DDL特性支持它们继续操作这张表。而3则影响更大，所有其他的表的事务都被迫block在<code>Certification</code>层级，相当于全库锁了。</p>
+<p>很容易在PXC上复现：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 执行顺序：(id) <span class="number">11</span> <span class="operator">=</span><span class="operator">&gt;</span> <span class="number">12</span> <span class="operator">=</span><span class="operator">&gt;</span> <span class="number">14</span></span><br><span class="line"><span class="operator">|</span> <span class="number">11</span> <span class="operator">|</span> root <span class="operator">|</span> localhost <span class="operator">|</span> test    <span class="operator">|</span> Query <span class="operator">|</span> <span class="number">769</span> <span class="operator">|</span> altering <span class="keyword">table</span>             <span class="operator">|</span> <span class="keyword">alter</span> <span class="keyword">table</span> data1 engine<span class="operator">=</span>innodb</span><br><span class="line"><span class="operator">|</span> <span class="number">12</span> <span class="operator">|</span> root <span class="operator">|</span> localhost <span class="operator">|</span> osctest <span class="operator">|</span> Query <span class="operator">|</span> <span class="number">392</span> <span class="operator">|</span> wsrep <span class="keyword">in</span> pre<span class="operator">-</span><span class="keyword">commit</span> stage  <span class="operator">|</span> <span class="keyword">delete</span> <span class="keyword">from</span> tbl</span><br><span class="line"><span class="operator">|</span> <span class="number">14</span> <span class="operator">|</span> root <span class="operator">|</span> localhost <span class="operator">|</span> test    <span class="operator">|</span> Query <span class="operator">|</span>   <span class="number">6</span> <span class="operator">|</span> Preparing <span class="keyword">for</span> <span class="keyword">TO</span> isolation <span class="operator">|</span> <span class="keyword">create</span> <span class="keyword">table</span> tbl_new (x <span class="type">int</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Rolling-Schema-Upgrade-RSU"><a href="#Rolling-Schema-Upgrade-RSU" class="headerlink" title="Rolling Schema Upgrade (RSU)"></a>Rolling Schema Upgrade (RSU)</h2><p><a target="_blank" rel="noopener" href="http://galeracluster.com/documentation-webpages/schemaupgrades.html#rolling-schema-upgrade">RSU模式</a>提供节点之间滚动升级schema的能力，操作时：</p>
+<ol>
+<li>设置RSU后不执行DDL情况下不会有任何不同，节点依旧与cluster同步，继续应用<code>write-set</code></li>
+<li>一旦发起DDL，节点与集群dsync开，数据同步停止；DDL完成后自动变回同步状态，追上增量</li>
+<li>单节点上，DDL期间DML依旧被阻塞，行为和TOI完全一致</li>
+<li>如果DDL时间很长，需要配置较大的<code>gcache</code>，否则做完DDL同步集群的时候发现gcache太小了强制进入SST全量恢复数据，那等于这个节点的DDL白做了……</li>
+</ol>
+<p>所以RSU相对TOI的主要一个区别就是DDL不会广播到其他节点进行，其他还是该阻塞的阻塞。虽然提供了滚动升级的能力，但是实际情况下，一个公司的Galera Cluster通常不会只包含multi-master，一旦某个master节点之后还有普通的MySQL复制着，这种滚动升级的难度相比普通主从MySQL架构要更高，毕竟Online DDL通过binlog复制到了从库，依旧会产生延迟……</p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>结论就是基于MySQL的Galera Cluster（比如PXC），是无法利用MySQL的Online DDL特性的。Galera处理DDL的方式即”执行“多久业务就要等待多久，所以大表变更在PXC上是非常危险的，如果需要做大表OSC，还是建议使用<code>pt-online-schema-change</code>或者<code>gh-ost</code>。</p>
+<p>不过和5.5这样的老版本对比，使用PXC 5.6+还是能一定程度上”收益“于Online DDL。比如更改<code>default</code>值这样的操作，在5.6之前需要rebuild table，Galera会阻塞很长时间的业务；但是到了5.6版本，即使依旧block业务，但是由于只修改metadata时间极短，DDL在MySQL层面处理时间被显著加快，从而大表DDL时锁库时间也得到大幅缩短。</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Ian</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://beanbee.github.io/blog/2018/did-online-ddl-work-on-pxc/">https://beanbee.github.io/blog/2018/did-online-ddl-work-on-pxc/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/PXC/">PXC</a><a class="post-meta__tags" href="/tags/Online-DDL/">Online DDL</a><a class="post-meta__tags" href="/tags/Galera-Cluster/">Galera Cluster</a><a class="post-meta__tags" href="/tags/OSC/">OSC</a><a class="post-meta__tags" href="/tags/RSU/">RSU</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/blog/2018/running-gh-ost-on-pxc/"><i class="fa fa-chevron-left">  </i><span>PXC上使用gh-ost在线变更表结构</span></a></div><div class="next-post pull-right"><a href="/blog/2018/quick-manual-of-pmm-mysql/"><span>使用PMM快速构建MySQL监控系统</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="disqus_thread"></div><script>var unused = null;
+var disqus_config = function () {
+  this.page.url = 'https://beanbee.github.io/blog/2018/did-online-ddl-work-on-pxc/';
+  this.page.identifier = 'blog/2018/did-online-ddl-work-on-pxc/';
+  this.page.title = 'Galera Cluster能否使用Online DDL?';
+}
+var d = document, s = d.createElement('script');
+s.src = "https://" + 'beanbee' +".disqus.com/embed.js";
+s.setAttribute('data-timestamp', '' + +new Date());
+(d.head || d.body).appendChild(s);</script></div></div><footer class="footer-bg" style="background-image: url(/images/default_top_image_beanbee.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2022 By Ian</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  CommonHTML: {
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "HTML-CSS": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "SVG": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  }
+});
+</script><script type="text/x-mathjax-config">MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for (i=0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.className += ' has-jax';
+  }
+});
+</script><script src="https://cdn.jsdelivr.net/npm/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
